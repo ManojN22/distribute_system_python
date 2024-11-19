@@ -1,0 +1,6 @@
+source disEnv/bin/activate
+cd node
+ls
+python3 node.py
+cd ..
+deactivate 
