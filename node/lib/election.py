@@ -1,9 +1,13 @@
 from lib.rpc import RPCClient
 from time import sleep
-class Elections:
+
+class Worker:
     def __init__(self, other_servers, private_ip) :
         self.other_servers = other_servers
         self.private_ip = private_ip
+        self.last_hearbeat = 0
+
+    def receive_heartbeat():
 
     
     def heart_beat(self):

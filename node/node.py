@@ -1,6 +1,6 @@
 from lib.rpc import RPCServer, RPCClient
 # from lib.test import 
-from lib.election import Elections
+from lib.election import Worker
 from lib.hello import respond_hello
 import json
 from netifaces import ifaddresses
@@ -8,7 +8,7 @@ from threading import Thread
 from time import sleep
 
 
-class Node(Elections):
+class Node(Worker):
     def __init__(self):
         self.setting_config()
         if self.a_ok==False:
@@ -46,6 +46,8 @@ class Node(Elections):
 
 def main():
     node = Node()
+    if node.a_ok==False:
+        exit(1)
     Thread(target=node.run).start()
     sleep(4)
     Thread(target=node.heart_beat).start()
