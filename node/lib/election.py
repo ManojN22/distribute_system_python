@@ -1,11 +1,16 @@
 from lib.rpc import RPCClient
-
+from time import sleep
 class Elections:
     def __init__(self, other_servers, private_ip) :
         self.other_servers = other_servers
         self.private_ip = private_ip
 
-        
+    
+    def heart_beat(self):
+        while(True):
+            sleep(0.1)
+            self.ping()
+
     def ping(self):
         for worker in self.other_servers:
             if(self.private_ip != worker['private_ip']):
@@ -16,3 +21,7 @@ class Elections:
                     server.disconnect()
                 except Exception as e:
                     print(e)
+
+
+        
+    

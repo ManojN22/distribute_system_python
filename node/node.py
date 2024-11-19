@@ -5,7 +5,7 @@ from lib.hello import respond_hello
 import json
 from netifaces import ifaddresses
 from threading import Thread
-import time
+from time import sleep
 
 
 class Node(Elections):
@@ -47,8 +47,11 @@ class Node(Elections):
 def main():
     node = Node()
     Thread(target=node.run).start()
-    time.sleep(2)
-    node.ping()
+    sleep(4)
+    Thread(target=node.heart_beat).start()
+    
+
+    
 
 if __name__ == "__main__":
     main()
