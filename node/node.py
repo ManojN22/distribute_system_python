@@ -17,6 +17,7 @@ class Node(Worker):
         super().__init__(self.other_servers,self.private_ip,self.leader_timeout, self.random_timeout)
         self.server.registerMethod(respond_hello)
         self.server.registerMethod(self.receive_heartbeat)
+        self.server.registerMethod(self.receive_voting)
     
 
     def run(self):

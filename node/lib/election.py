@@ -42,16 +42,6 @@ class Worker:
                 self.term+=1
                 Thread(target=self.run_candidate).start()
                 # print("leader failed")
-
-    def receive_heartbeat(self, leader_ip, term):
-        if(term > self.term):
-            self.term = term
-            self.leader_ip = leader_ip    
-            self.state = State.SLAVE  
-            self.run_slave()  
-        self.last_hearbeat = time()
-
-        return "received the beat"
     
     def heart_beat(self):
         while(self.state == State.LEADER):
@@ -76,7 +66,7 @@ class Worker:
                 try:
                     server = RPCClient(host=worker['private_ip'], port=worker['port'])
                     server.connect()
-                    if(server.voting(self.term)):
+                    if(server.receive_voting(self.term)):
                         votes+=1
                     server.disconnect()
                 except Exception as e:
@@ -85,11 +75,21 @@ class Worker:
                 self.state = State.LEADER
                 self.run_leader()
     
-    def voting(self, term):
+    def receive_voting(self, term):
         if(term>self.term):
             self.term = term
             return True
         return False
+        
+    def receive_heartbeat(self, leader_ip, term):
+        if(term > self.term):
+            self.term = term
+            self.leader_ip = leader_ip    
+            self.state = State.SLAVE  
+            self.run_slave()  
+        self.last_hearbeat = time()
+
+        return "received the beat"
 
 
 
