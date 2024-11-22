@@ -75,6 +75,7 @@ class Worker:
                 except Exception as e:
                     print(e)
             if(votes>len(self.other_servers)/2):
+                print("LEADER ELECTED")
                 self.state = State.LEADER
                 self.run_leader()
     
