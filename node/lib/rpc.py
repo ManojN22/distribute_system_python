@@ -50,12 +50,12 @@ class RPCServer:
         client -> 
     '''
     def __handle__(self, client:socket.socket, address:tuple):
-        print(f'Managing requests from {address}.')
+        # print(f'Managing requests from {address}.')
         while True:
             try:
                 functionName, args, kwargs = json.loads(client.recv(SIZE).decode())
             except: 
-                print(f'! Client {address} disconnected.')
+                # print(f'! Client {address} disconnected.')
                 break
             # Showing request Type
             print(f'> {address} : {functionName}({args})')
