@@ -14,8 +14,9 @@ class Node(Worker):
         if self.a_ok==False:
             exit(1)
         self.server = RPCServer(host=self.private_ip, port=self.port)
-        super().__init__(self.other_servers,self.private_ip)
+        super().__init__(self.other_servers,self.private_ip,self.leader_timeout, self.random_timeout)
         self.server.registerMethod(respond_hello)
+        self.server.registerMethod(self.receive_heartbeat)
     
 
     def run(self):
@@ -39,6 +40,8 @@ class Node(Worker):
                         'private_ip' : server['private_ip'],
                         'port' : server['port']
                     })
+            self.leader_timeout = config['leader']['timeout']
+            self.random_timeout = config['leader']['random_timeout']
             
     
         
@@ -49,8 +52,8 @@ def main():
     if node.a_ok==False:
         exit(1)
     Thread(target=node.run).start()
-    sleep(4)
-    Thread(target=node.heart_beat).start()
+    # sleep(2)
+    Thread(target=node.run_slave).start()
     
 
     
