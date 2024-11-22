@@ -23,12 +23,15 @@ class Worker:
         self.term = 0
     
     def run_slave(self):
+        print("RUNNING SLAVE")
         Thread(target=self.check_heartbeat).start()
     
     def run_candidate(self):
+        print("RUNNING CANDIDATE")
         Thread(target=self.ask_vote).start()
 
     def run_leader(self):
+        print("RUNNING LEADER")
         Thread(target=self.heart_beat).start()
         
     
@@ -41,7 +44,7 @@ class Worker:
                 self.state = State.CANDIDATE
                 self.term+=1
                 Thread(target=self.run_candidate).start()
-                # print("leader failed")
+                print("leader failed")
     
     def heart_beat(self):
         while(self.state == State.LEADER):
@@ -54,7 +57,7 @@ class Worker:
                 try:
                     server = RPCClient(host=worker['private_ip'], port=worker['port'])
                     server.connect()
-                    print(server.receive_heartbeat(self.private_ip, self.term))
+                    server.receive_heartbeat(self.private_ip, self.term)
                     server.disconnect()
                 except Exception as e:
                     print(e)
