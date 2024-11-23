@@ -59,7 +59,9 @@ class Worker:
                     server.connect()
                     server.receive_heartbeat(self.private_ip, self.term)
                     server.disconnect()
-                except Exception as e:
+                except:
+                    i=0
+                # except Exception as e:
                     # print(e)
 
     def ask_vote(self):
@@ -74,7 +76,9 @@ class Worker:
                         votes+=1
                     total_votes+=1
                     server.disconnect()
-                except Exception as e:
+                except:
+                    i=0
+                # except Exception as e:
                     # print(e)
             if(votes>total_votes/2):
                 print("LEADER ELECTED")
