@@ -23,15 +23,15 @@ class Worker:
         self.term = 0
     
     def run_slave(self):
-        print("RUNNING SLAVE")
+        print("RUNNING SLAVE: ", self.term)
         Thread(target=self.check_heartbeat).start()
     
     def run_candidate(self):
-        print("RUNNING CANDIDATE")
+        print("RUNNING CANDIDATE: ", self.term)
         Thread(target=self.ask_vote).start()
 
     def run_leader(self):
-        print("RUNNING LEADER")
+        print("RUNNING LEADER: ", self.term)
         Thread(target=self.heart_beat).start()
         
     
