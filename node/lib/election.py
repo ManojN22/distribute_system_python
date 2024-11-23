@@ -65,16 +65,18 @@ class Worker:
     def ask_vote(self):
         for worker in self.other_servers:
             votes = 1
+            total_votes = 1
             if(self.private_ip != worker['private_ip']):
                 try:
                     server = RPCClient(host=worker['private_ip'], port=worker['port'])
                     server.connect()
                     if(server.receive_voting(self.term)):
                         votes+=1
+                    total_votes+=1
                     server.disconnect()
                 except Exception as e:
                     print(e)
-            if(votes>len(self.other_servers)/2):
+            if(votes>total_votes/2):
                 print("LEADER ELECTED")
                 self.state = State.LEADER
                 self.run_leader()
