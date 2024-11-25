@@ -50,6 +50,7 @@ class Worker:
                 self.lock.release()
                 self.run_candidate()
                 print("leader failed")
+                break
     
     def heart_beat(self):
         while(self.state == State.LEADER):
