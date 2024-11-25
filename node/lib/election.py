@@ -1,8 +1,10 @@
 from lib.rpc import RPCClient
 from time import sleep, time
-from threading import Thread
+from threading import Thread, Lock
 from random import random
 import enum
+
+
 
 class State(enum.Enum):
     SLAVE=1
@@ -21,6 +23,7 @@ class Worker:
         self.random_timeout = random_timeout
         self.state = State.SLAVE
         self.term = 0
+        self.lock = Lock()
     
     def run_slave(self):
         print("RUNNING SLAVE: ", self.term)
@@ -41,9 +44,11 @@ class Worker:
             sleep(current_timeout)
             cur = time()
             if((cur - self.last_hearbeat)>current_timeout):
+                self.lock.acquire()
                 self.state = State.CANDIDATE
                 self.term+=1
-                Thread(target=self.run_candidate).start()
+                self.lock.release()
+                self.run_candidate()
                 print("leader failed")
     
     def heart_beat(self):
@@ -80,11 +85,13 @@ class Worker:
                     i=0
                 # except Exception as e:
                     # print(e)
-            if(votes>total_votes/2):
-                print("LEADER ELECTED")
-                self.state = State.LEADER
-                self.run_leader()
-    
+        if(votes>total_votes/2):
+            self.lock.acquire()
+            print("LEADER ELECTED")
+            self.state = State.LEADER
+            self.run_leader()
+            self.lock.release()
+
     def receive_voting(self, term):
         if(term>self.term):
             self.term = term
