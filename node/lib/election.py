@@ -70,9 +70,9 @@ class Worker:
                     # print(e)
 
     def ask_vote(self):
+        votes = 1
+        total_votes = 1
         for worker in self.other_servers:
-            votes = 1
-            total_votes = 1
             if(self.private_ip != worker['private_ip']):
                 try:
                     server = RPCClient(host=worker['private_ip'], port=worker['port'])
